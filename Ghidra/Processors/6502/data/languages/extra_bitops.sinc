@@ -1,0 +1,45 @@
+# Additional bit manipulation instructions.
+
+################################################################
+# Tokens
+################################################################
+
+define token bitopbyte (8)
+	bitop		= (0,7)
+
+	action		= (7,7)
+	bitindex	= (4,6) dec
+	optype		= (0,3)
+;
+
+################################################################
+# Instructions
+################################################################
+
+:BBR "#"bitindex, imm8, REL	is (action=0 & optype=0xF) & bitindex ; imm8 ; REL {
+	local ptr:2 = imm8;
+	local value:1 = *:1 ptr;
+	local jump = (value & (1 << bitindex)) == 0;
+	if (jump) goto REL;
+}
+
+:BBS "#"bitindex, imm8, REL	is (action=1 & optype=0xF) & bitindex ; imm8 ; REL {
+	local ptr:2 = imm8;
+	local value:1 = *:1 ptr;
+	local jump = (value & (1 << bitindex)) != 0;
+	if (jump) goto REL;
+}
+
+:RMB "#"bitindex, imm8		is (action=0 & optype=7) & bitindex ; imm8 {
+	local ptr:2 = imm8;
+	local value:1 = *:1 ptr;
+	value = value & ~(1 << bitindex);
+	*:1 ptr = value;
+}
+
+:SMB "#"bitindex, imm8		is (action=1 & optype=7) & bitindex ; imm8 {
+	local ptr:2 = imm8;
+	local value:1 = *:1 ptr;
+	value = value | (1 << bitindex);
+	*:1 ptr = value;
+}

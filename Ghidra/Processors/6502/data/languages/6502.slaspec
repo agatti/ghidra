@@ -11,7 +11,9 @@ define register offset=0x20 size=2  [ PC      SP   ];
 define register offset=0x20 size=1  [ PCL PCH S SH ];
 define register offset=0x30 size=1 [ N V B D I Z C ];	# status bits
 
-# TOKENS
+################################################################
+# Tokens
+################################################################
 
 define token opbyte (8)
    op       = (0,7)
@@ -29,6 +31,10 @@ define token data8 (8)
 define token data (16)
 	imm16 = (0,15)
 ;
+
+################################################################
+# Macros
+################################################################
 
 macro popSR() {
 	local ccr = *:1 SP;
@@ -69,12 +75,9 @@ macro subtraction_flags1(register, operand, result) {
 }
 
 ################################################################
-# Pseudo Instructions
+# Operand tables
 ################################################################
 
-define pcodeop readIRQ;
-
-################################################################
 REL: reloc		is rel	[ reloc = inst_next + rel; ] { export *:2 reloc; } 
 
 # Immediate
@@ -113,10 +116,12 @@ OP2LD: OP2      is OP2                  { export OP2; }
 OP2LD: imm8,Y   is bbb=5 & Y; imm8		{ tmp:2 = zext(imm8 + Y); export *:1 tmp; }
 OP2LD: imm16,Y  is bbb=7 & Y; imm16		{ tmp:2 = imm16 + zext(Y); export *:1 tmp; }
 
-ADDR16: imm16   is imm16   	{ export *:1 imm16; }
+ADDR16: imm16   is imm16	{ export *:1 imm16; }
 ADDRI:  imm16   is imm16    { tmp:2 = imm16; export *:2 tmp; }
 
+################################################################
 # Instructions
+################################################################
 
 :ADC OP1     is (cc=1 & aaa=3) ... & OP1
 {

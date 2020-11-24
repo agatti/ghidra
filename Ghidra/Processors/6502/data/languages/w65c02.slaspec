@@ -1,16 +1,7 @@
 # Sleigh specification file for WDC W65C02.
 
 @include "65c02.slaspec"
-
-# TOKENS
-
-define token bitopbyte (8)
-	bitop		= (0,7)
-
-	action		= (7,7)
-	bitindex	= (4,6) dec
-	optype		= (0,3)
-;
+@include "extra_bitops.sinc"
 
 ################################################################
 # Pseudo Instructions
@@ -18,35 +9,9 @@ define token bitopbyte (8)
 
 define pcodeop waitForInterrupt;
 
+################################################################
 # Instructions
-
-:BBR "#"bitindex, imm8, REL	is (action=0 & optype=0xF) & bitindex ; imm8 ; REL {
-	local ptr:2 = imm8;
-	local value:1 = *:1 ptr;
-	local jump = (value & (1 << bitindex)) == 0;
-	if (jump) goto REL;
-}
-
-:BBS "#"bitindex, imm8, REL	is (action=1 & optype=0xF) & bitindex ; imm8 ; REL {
-	local ptr:2 = imm8;
-	local value:1 = *:1 ptr;
-	local jump = (value & (1 << bitindex)) != 0;
-	if (jump) goto REL;
-}
-
-:RMB "#"bitindex, imm8		is (action=0 & optype=7) & bitindex ; imm8 {
-	local ptr:2 = imm8;
-	local value:1 = *:1 ptr;
-	value = value & ~(1 << bitindex);
-	*:1 ptr = value;
-}
-
-:SMB "#"bitindex, imm8		is (action=1 & optype=7) & bitindex ; imm8 {
-	local ptr:2 = imm8;
-	local value:1 = *:1 ptr;
-	value = value | (1 << bitindex);
-	*:1 ptr = value;
-}
+################################################################
 
 :STP						is op=0xDB
 {

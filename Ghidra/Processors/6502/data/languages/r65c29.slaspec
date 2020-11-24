@@ -2,23 +2,9 @@
 
 @include "6502.slaspec"
 
-# TOKENS
-
-define token bitopbyte (8)
-	bitop		= (0,7)
-
-	action		= (7,7)
-	bitindex	= (4,6) dec
-	optype		= (0,3)
-;
-
 ################################################################
-# Pseudo Instructions
-################################################################
-
-define pcodeop waitForInterrupt;
-
 # Instructions
+################################################################
 
 :BRA  REL	is op=0x80; REL
 {

@@ -2,26 +2,34 @@
 
 @include "6502.slaspec"
 
-define token testopbyte (8)
-	top		= (0, 7)
+################################################################
+# Tokens
+################################################################
 
-	taaa	= (5, 7)
-	td		= (4, 4)
-	tbb		= (2, 3)
-	tcc		= (0, 1)
+define token testopbyte (8)
+	test_op		= (0, 7)
+
+	test_aaa	= (5, 7)
+	test_kind	= (4, 4)
+	test_bb		= (2, 3)
+	test_cc		= (0, 1)
 ;
 
+################################################################
+# Operand tables
 ################################################################
 
 # Zero Page Indirect
 ZIOP: (imm8)	is bbb=4; imm8			{ addr:2 = imm8; tmp:2 = *:2 addr; export *:1 tmp; }
 
-OPTB: imm8		is tbb=1; imm8			{ export *:1 imm8; }
-OPTB: imm16		is tbb=3; imm16			{ export *:1 imm16; }
+OPTB: imm8		is test_bb=1; imm8		{ export *:1 imm8; }
+OPTB: imm16		is test_bb=3; imm16		{ export *:1 imm16; }
 
 ADDRIX: imm16,X	is X; imm16				{ addr:2 = imm16 + zext(X); tmp:2 = *:2 addr; export tmp; }
 
+################################################################
 # Instructions
+################################################################
 
 :ADC ZIOP			is (cc=2 & aaa=3) ... & ZIOP
 {
@@ -163,14 +171,14 @@ ADDRIX: imm16,X	is X; imm16				{ addr:2 = imm16 + zext(X); tmp:2 = *:2 addr; exp
 	*:1 tmp = 0;
 }
 
-:TRB OPTB			is (tcc=0 & taaa=0 & td=1) ... & OPTB
+:TRB OPTB			is (test_cc=0 & test_aaa=0 & test_kind=1) ... & OPTB
 {
 	local op1 = OPTB;
 	local result = A & ~op1;
 	Z = result == 0;
 }
 
-:TSB OPTB			is (tcc=0 & taaa=0 & td=0) ... & OPTB
+:TSB OPTB			is (test_cc=0 & test_aaa=0 & test_kind=0) ... & OPTB
 {
 	local op1 = OPTB;
 	local result = A | op1;

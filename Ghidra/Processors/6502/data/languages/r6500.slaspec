@@ -1,0 +1,4 @@
+# Sleigh specification file for Rockwell R6500.
+
+@include "6502.slaspec"
+@include "extra_bitops.sinc"
