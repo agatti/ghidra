@@ -1,0 +1,30 @@
+# Sleigh specification file for Mitsubishi/Renesas MELPS 37450 series.
+
+@include "base_m740.sinc"
+
+################################################################
+# Pseudo instructions
+################################################################
+
+define pcodeop stopInternalClock;
+
+################################################################
+# Instructions
+################################################################
+
+:DIV imm8,X                 is op=0xE2 & X ; imm8
+{
+    local ptr:2 = zext(imm8 + X);
+    local value:2 = *:1 ptr;
+    local accumulator:2 = zext(A);
+    local quotient:2 = accumulator / value;
+    local remainder:2 = accumulator % value;
+    A = quotient:1;
+    *:1 (SP) = ~(remainder:1);
+	SP = SP - 1;
+}
+
+:WIT                        is op=0xC2
+{
+    stopInternalClock();
+}

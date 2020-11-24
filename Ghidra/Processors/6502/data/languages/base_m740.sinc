@@ -1,0 +1,144 @@
+# Sleigh specification file for Mitsubishi/Renesas MELPS 740 series.
+
+define endian=little;
+define alignment=1;
+
+define space RAM     type=ram_space      size=2  default;
+define space register type=register_space size=1;
+
+define register offset=0x00 size=1 [ A X Y P ];
+define register offset=0x20 size=2 [ PC      SP   ];
+define register offset=0x20 size=1 [ PCL PCH S SH ];
+define register offset=0x30 size=1 [ N V T B D I Z C ];
+
+@include "base_opcodes.sinc"
+
+################################################################
+# Tokens
+################################################################
+
+define token bitopbyte (8)
+	bitop		= (0,7)
+
+    bitindex    = (5,7) dec
+	optype	    = (0,4)
+;
+
+define token data8extra (8)
+	imm8extra   = (0,7)
+;
+
+################################################################
+# Instructions
+################################################################
+
+:BRA  REL	                is op=0x80; REL
+{
+	goto REL;
+}
+
+:CLB "#"bitindex, A		    is optype=0x1B & bitindex & A
+{
+    A = A & ~(1 << bitindex);
+}
+
+:CLB "#"bitindex, imm8		is optype=0x1F & bitindex ; imm8
+{
+	local ptr:2 = imm8;
+	local value:1 = *:1 ptr;
+	value = value & ~(1 << bitindex);
+	*:1 ptr = value;
+}
+
+:CLT                        is op=0x12
+{
+    T = 0;
+}
+
+:COM imm8                   is op=0x44 ; imm8
+{
+    local ptr:2 = imm8;
+	local value:1 = *:1 ptr;
+    value = ~value;
+    *:1 ptr = value;
+    resultFlags(value);
+}
+
+:DEC A                      is op=0x1A & A
+{
+    A = A - 1;
+    resultFlags(A);
+}
+
+:INC A                      is op=0x3A & A
+{
+	A = A + 1;
+	resultFlags(A);
+}
+
+# This should have been :JMP "\\0x1F"imm8 but there is no real way to strip
+# the base modifier from a token, so it actually looks like JMP \0x1F0x...
+# which is not correct.  Therefore the implicit 0x1F00 base address is
+# hidden away and only the base offset is shown instead.
+
+:JMP "\\"imm8               is op=0x22 ; imm8
+{
+    local ptr:2 = 0x1F00 + zext(imm8:2);
+    goto [ptr];
+}
+
+:LDM imm8,"#"imm8extra      is op=0x3C ; imm8 ; imm8extra
+{
+    local ptr:2 = imm8;
+    *:1 ptr = imm8extra;
+}
+
+:MUL imm8,X                 is op=0x62 & X ; imm8
+{
+    local ptr:2 = zext(imm8 + X);
+    local value:2 = *:1 ptr;
+    local accumulator:2 = zext(A); 
+    local result:2 = accumulator * value;
+    local high:2 = result >> 8;
+	local low:2 = result & 0xFF;
+    A = low:1;
+    *:1 (SP) = high:1;
+	SP = SP - 1;
+}
+
+:RRF imm8                   is op=0x82 ; imm8
+{
+    local ptr:2 = imm8;
+    local value:1 = *:1 ptr;
+    *:1 ptr = ((value & 0x0F) << 4) | ((value & 0xF0) >> 4);
+}
+
+:SEB "#"bitindex, A		    is optype=0x0B & bitindex & A
+{
+    A = A | (1 << bitindex);
+}
+
+:SEB "#"bitindex, imm8		is optype=0x0F & bitindex ; imm8
+{
+	local ptr:2 = imm8;
+	local value:1 = *:1 ptr;
+	value = value | (1 << bitindex);
+	*:1 ptr = value;
+}
+
+:SET                        is op=0x32
+{
+    T = 1;
+}
+
+:STP                        is op=0x42
+{
+    goto inst_start;
+}
+
+:TST imm8                   is op=0x64 ; imm8
+{
+    local ptr:2 = imm8;
+    local value:1 = *:1 ptr;
+    resultFlags(value);
+}

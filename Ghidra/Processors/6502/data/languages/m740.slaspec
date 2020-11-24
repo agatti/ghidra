@@ -1,0 +1,24 @@
+# Sleigh specification file for Mitsubishi/Renesas MELPS 740 series.
+
+@include "base_m740.sinc"
+
+################################################################
+# Pseudo instructions
+################################################################
+
+define pcodeop connectOscillator;
+define pcodeop disconnectOscillator;
+
+################################################################
+# Instructions
+################################################################
+
+:FST                        is op=0xE2
+{
+    connectOscillator();
+}
+
+:SLW                        is op=0xC2
+{
+    disconnectOscillator();
+}
