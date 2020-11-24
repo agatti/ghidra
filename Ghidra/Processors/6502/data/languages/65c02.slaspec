@@ -20,12 +20,13 @@ define token testopbyte (8)
 ################################################################
 
 # Zero Page Indirect
-ZIOP: (imm8)	is bbb=4; imm8			{ addr:2 = imm8; tmp:2 = *:2 addr; export *:1 tmp; }
+ZIOP: (imm8)		is bbb=4; imm8			{ addr:2 = imm8; tmp:2 = *:2 addr; export *:1 tmp; }
 
-OPTB: imm8		is test_bb=1; imm8		{ export *:1 imm8; }
-OPTB: imm16		is test_bb=3; imm16		{ export *:1 imm16; }
+OPTB: imm8			is test_bb=1; imm8		{ export *:1 imm8; }
+OPTB: imm16			is test_bb=3; imm16		{ export *:1 imm16; }
 
-ADDRIX: imm16,X	is X; imm16				{ addr:2 = imm16 + zext(X); tmp:2 = *:2 addr; export tmp; }
+# Absolute Indexed Indirect
+ADDRIX: (imm16,X)	is X; imm16				{ addr:2 = imm16 + zext(X); tmp:2 = *:2 addr; export tmp; }
 
 ################################################################
 # Instructions
