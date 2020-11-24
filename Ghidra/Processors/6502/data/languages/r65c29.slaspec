@@ -1,0 +1,58 @@
+# Sleigh specification file for Rockwell R65C29.
+
+@include "6502.slaspec"
+
+# TOKENS
+
+define token bitopbyte (8)
+	bitop		= (0,7)
+
+	action		= (7,7)
+	bitindex	= (4,6) dec
+	optype		= (0,3)
+;
+
+################################################################
+# Pseudo Instructions
+################################################################
+
+define pcodeop waitForInterrupt;
+
+# Instructions
+
+:BRA  REL	is op=0x80; REL
+{
+	goto REL;
+}
+
+:MUL		is op=0x02 {
+	local result:2 = zext(A) * zext(Y);
+	local high:2 = result >> 8;
+	local low:2 = result & 0xFF;
+	A = high:1;
+	Y = low:1;
+}
+
+:PHX		is op=0xDA
+{
+	*:1 (SP) = X;
+	SP = SP - 1;
+}
+
+:PLX		is op=0xFA
+{
+	SP = SP + 1;
+	X = *:1 (SP);
+}
+
+:PHY		is op=0x5A
+{
+	*:1 (SP) = Y;
+	SP = SP - 1;
+}
+
+:PLY		is op=0x7A
+{
+	SP = SP + 1;
+	Y = *:1 (SP);
+}

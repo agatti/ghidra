@@ -23,11 +23,10 @@
             version="1.0"
             slafile="65c02.sla"
             processorspec="6502.pspec"
-            manualindexfile="../manuals/6502.idx"
             id="65C02:LE:16:default">
     <description>65C02 Microcontroller Family</description>
     <compiler name="default" spec="6502.cspec" id="default"/>
-  	<external_name tool="IDA-PRO" name="m65cc02"/>
+  	<external_name tool="IDA-PRO" name="m65c02"/>
   </language>
   
   <language processor="w65c02"
@@ -37,12 +36,25 @@
             version="1.0"
             slafile="w65c02.sla"
             processorspec="6502.pspec"
-            manualindexfile="../manuals/6502.idx"
             id="W65C02:LE:16:default">
     <description>W65C02 Microcontroller Family</description>
     <compiler name="default" spec="6502.cspec" id="default"/>
-  	<external_name tool="IDA-PRO" name="m65cc02"/>
+  	<external_name tool="IDA-PRO" name="m65c02"/>
   </language>
+
+  <language processor="r65c29"
+            endian="little"
+            size="16"
+            variant="default"
+            version="1.0"
+            slafile="r65c29.sla"
+            processorspec="6502.pspec"
+            id="R65C29:LE:16:default">
+    <description>Rockwell R65C29 Microcontroller</description>
+    <compiler name="default" spec="6502.cspec" id="default"/>
+  	<external_name tool="IDA-PRO" name="m65c02"/>
+  </language>
+
 
   <!-- The following entry has a very misleading language id but
        can not be removed since it may have already been referenced.
