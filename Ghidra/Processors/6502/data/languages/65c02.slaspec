@@ -1,3 +1,5 @@
+# Sleigh specification file for 65C02
+
 @include "6502.slaspec"
 
 define token testopbyte (8)
