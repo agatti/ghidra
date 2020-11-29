@@ -119,6 +119,7 @@ ADDRIX: (imm16,X)	is X; imm16				{ addr:2 = imm16 + zext(X); tmp:2 = *:2 addr; e
 {
 	SP = SP + 1;
 	X = *:1 (SP);
+	resultFlags(X);
 }
 
 :PHY				is op=0x5A
@@ -131,6 +132,7 @@ ADDRIX: (imm16,X)	is X; imm16				{ addr:2 = imm16 + zext(X); tmp:2 = *:2 addr; e
 {
 	SP = SP + 1;
 	Y = *:1 (SP);
+	resultFlags(Y);
 }
 
 :SBC ZIOP			is (cc=2 & aaa=7) ... & ZIOP

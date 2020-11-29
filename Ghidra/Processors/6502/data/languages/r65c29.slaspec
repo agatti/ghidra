@@ -29,6 +29,7 @@
 {
 	SP = SP + 1;
 	X = *:1 (SP);
+	resultFlags(X);
 }
 
 :PHY		is op=0x5A
@@ -41,4 +42,5 @@
 {
 	SP = SP + 1;
 	Y = *:1 (SP);
+	resultFlags(Y);
 }
