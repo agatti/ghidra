@@ -199,11 +199,12 @@ class DataTypeComponentDB implements InternalDataTypeComponent {
 	}
 
 	@Override
-	public void setComment(String comment) {
+	public DataTypeComponent setComment(String comment) {
 		if (record != null) {
 			record.setString(ComponentDBAdapter.COMPONENT_COMMENT_COL, comment);
 			updateRecord(true);
 		}
+		return this;
 	}
 
 	@Override
@@ -218,7 +219,7 @@ class DataTypeComponentDB implements InternalDataTypeComponent {
 	}
 
 	@Override
-	public void setFieldName(String name) throws DuplicateNameException {
+	public DataTypeComponent setFieldName(String name) throws DuplicateNameException {
 		if (record != null) {
 			if (name != null) {
 				name = name.trim();
@@ -232,6 +233,7 @@ class DataTypeComponentDB implements InternalDataTypeComponent {
 			record.setString(ComponentDBAdapter.COMPONENT_FIELD_NAME_COL, name);
 			updateRecord(true);
 		}
+		return this;
 	}
 
 	private void checkDuplicateName(String name) throws DuplicateNameException {
@@ -393,13 +395,14 @@ class DataTypeComponentDB implements InternalDataTypeComponent {
 	}
 
 	@Override
-	public void setDataType(DataType newDt) {
+	public DataTypeComponent setDataType(DataType newDt) {
 		// intended for internal use only - note exsiting settings should be preserved
 		if (record != null) {
 			record.setLongValue(ComponentDBAdapter.COMPONENT_DT_ID_COL,
 				dataMgr.getResolvedID(newDt));
 			updateRecord(false);
 		}
+		return this;
 	}
 
 	@Override

@@ -114,8 +114,9 @@ public class DataTypeComponentImpl implements InternalDataTypeComponent, Seriali
 	}
 
 	@Override
-	public void setComment(String comment) {
+	public DataTypeComponent setComment(String comment) {
 		this.comment = comment;
+		return this;
 	}
 
 	@Override
@@ -127,7 +128,7 @@ public class DataTypeComponentImpl implements InternalDataTypeComponent, Seriali
 	}
 
 	@Override
-	public void setFieldName(String name) throws DuplicateNameException {
+	public DataTypeComponent setFieldName(String name) throws DuplicateNameException {
 		if (name != null) {
 			name = name.trim();
 			if (name.length() == 0 || name.equals(getDefaultFieldName())) {
@@ -135,12 +136,13 @@ public class DataTypeComponentImpl implements InternalDataTypeComponent, Seriali
 			}
 			else {
 				if (name.equals(this.fieldName)) {
-					return;
+					return this;
 				}
 				checkDuplicateName(name);
 			}
 		}
 		this.fieldName = name;
+		return this;
 	}
 
 	private void checkDuplicateName(String name) throws DuplicateNameException {
@@ -312,9 +314,10 @@ public class DataTypeComponentImpl implements InternalDataTypeComponent, Seriali
 	}
 
 	@Override
-	public void setDataType(DataType dt) {
+	public DataTypeComponent setDataType(DataType dt) {
 		// intended for internal use only - note exsiting settings should be preserved
 		dataType = dt;
+		return this;
 	}
 
 	/**

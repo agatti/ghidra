@@ -96,8 +96,9 @@ public interface DataTypeComponent {
 	/**
 	 * Sets the comment for the component.
 	 * @param comment this components comment or null to clear comment.
+	 * @return the component instance.
 	 */
-	public void setComment(String comment);
+	public DataTypeComponent setComment(String comment);
 
 	/**
 	 * Get the name of the field name as a component of a Data Type.
@@ -111,11 +112,12 @@ public interface DataTypeComponent {
 	 * parent's other components already has the specified field name.
 	 *
 	 * @param fieldName the new field name for this component.
+	 * @return the component instance.
 	 *
 	 * @throws DuplicateNameException if another component of the parent has
 	 * the specified field name.
 	 */
-	public void setFieldName(String fieldName) throws DuplicateNameException;
+	public DataTypeComponent setFieldName(String fieldName) throws DuplicateNameException;
 
 	/**
 	 * Returns a default Field name.  Used only if a field name is not set.

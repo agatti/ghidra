@@ -117,7 +117,7 @@ public class AlignedStructureInspector extends AlignedStructurePacker {
 		}
 
 		@Override
-		public void setComment(String comment) {
+		public DataTypeComponent setComment(String comment) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -127,7 +127,7 @@ public class AlignedStructureInspector extends AlignedStructurePacker {
 		}
 
 		@Override
-		public void setFieldName(String fieldName) throws DuplicateNameException {
+		public DataTypeComponent setFieldName(String fieldName) throws DuplicateNameException {
 			throw new UnsupportedOperationException();
 		}
 
@@ -145,8 +145,9 @@ public class AlignedStructureInspector extends AlignedStructurePacker {
 		}
 
 		@Override
-		public void setDataType(DataType dataType) {
+		public DataTypeComponent setDataType(DataType dataType) {
 			this.dataType = dataType;
+			return this;
 		}
 
 	}

@@ -21,8 +21,9 @@ public interface InternalDataTypeComponent extends DataTypeComponent {
 	 * Sets the DataType for this component.  Must be used carefully since the component
 	 * will not be resized.
 	 * @param dataType the new DataType for this component
+	 * @return the component instance.
 	 */
-	public void setDataType(DataType dataType);
+	public DataTypeComponent setDataType(DataType dataType);
 
 	/**
 	 * Update component ordinal, offset and length during alignment
